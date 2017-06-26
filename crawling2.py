@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import re
 import urlparse
 import urllib2
@@ -5,6 +7,15 @@ import time
 from datetime import datetime
 import robotparser
 import Queue
+
+import lxml.html
+
+
+def scrape(html):
+    tree = lxml.html.fromstring(html)
+    td = tree.cssselect('tr#places_neighbours__row > td.w2p_fw')[0]
+    area = td.text_content()
+    return area
 
 
 def link_crawler(seed_url, link_regex=None, delay=5, max_depth=-1, max_urls=-1, headers=None, user_agent='wswp',
@@ -29,6 +40,7 @@ def link_crawler(seed_url, link_regex=None, delay=5, max_depth=-1, max_urls=-1, 
         if rp.can_fetch(user_agent, url):
             throttle.wait(url)
             html = download(url, headers, proxy=proxy, num_retries=num_retries)
+            print scrape(html)
             links = []
 
             depth = seen[url]
@@ -133,6 +145,13 @@ def get_links(html):
 
 
 if __name__ == '__main__':
-    link_crawler('example.webscraping.com', '/(index|view)', delay=0, num_retries=1, user_agent='BadCrawler')
-    link_crawler('example.webscraping.com', '/(index|view)', delay=0, num_retries=1, max_depth=1,
+    # link_crawler('example.webscraping.com', '/(index|view)', delay=0, num_retries=1, user_agent='BadCrawler')
+    link_crawler('http://example.webscraping.com', '/places/default/(index|view)', delay=0, num_retries=1, max_depth=1,
                  user_agent='GoodCrawler')
+
+
+
+#
+# if __name__ == '__main__':
+#     html = urllib2.urlopen('http://example.webscraping.com/view/United-Kingdom-239').read()
+#     print scrape(html)

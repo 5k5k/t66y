@@ -53,4 +53,4 @@ def get_links(html):
 
 
 
-link_crawler('https://example.webscraping.com', '/(index|view)')
+link_crawler('https://example.webscraping.com', '/places/default/(index|view)')
