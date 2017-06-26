@@ -40,7 +40,8 @@ def link_crawler(seed_url, link_regex=None, delay=5, max_depth=-1, max_urls=-1, 
         if rp.can_fetch(user_agent, url):
             throttle.wait(url)
             html = download(url, headers, proxy=proxy, num_retries=num_retries)
-            print scrape(html)
+            print 'html ', html
+            print 'scrape ', scrape(html)
             links = []
 
             depth = seen[url]
@@ -144,14 +145,13 @@ def get_links(html):
     return webpage_regex.findall(html)
 
 
-if __name__ == '__main__':
-    # link_crawler('example.webscraping.com', '/(index|view)', delay=0, num_retries=1, user_agent='BadCrawler')
-    link_crawler('http://example.webscraping.com', '/places/default/(index|view)', delay=0, num_retries=1, max_depth=1,
-                 user_agent='GoodCrawler')
-
-
-
-#
 # if __name__ == '__main__':
-#     html = urllib2.urlopen('http://example.webscraping.com/view/United-Kingdom-239').read()
-#     print scrape(html)
+#     # link_crawler('example.webscraping.com', '/(index|view)', delay=0, num_retries=1, user_agent='BadCrawler')
+#     link_crawler('http://example.webscraping.com', '/places/default/(index|view)', delay=0, num_retries=1, max_depth=1,
+#                  user_agent='GoodCrawler')
+
+
+if __name__ == '__main__':
+    html = urllib2.urlopen('http://example.webscraping.com/places/default/view/United-Kingdom-239').read()
+    print html
+    print scrape(html)
